@@ -1,0 +1,44 @@
+import React from 'react';
+import { createRoot } from 'react-dom/client'; 
+import App from './App.jsx'; 
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from 'react-router-dom'; 
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+import store from './store'; 
+import { Provider } from 'react-redux'; 
+import HomeScreen from './screens/HomeScreen'; 
+import LoginScreen from './screens/LoginScreen.jsx'; 
+import RegisterScreen from './screens/RegisterScreen.jsx';
+import ProfileScreen from './screens/ProfileScreen.jsx'; 
+import PrivateRoute from './components/PrivateRoute.jsx'; 
+import { AppProvider } from './context'; 
+
+// create browserrouter with route config
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path='/' element={<App />}>
+      <Route index={true} path='/' element={<HomeScreen />} />
+      <Route path='/login' element={<LoginScreen />} />
+      <Route path='/register' element={<RegisterScreen />} />
+      <Route path='' element={<PrivateRoute />}>
+        <Route path='/profile' element={<ProfileScreen />} />
+      </Route>
+    </Route>
+  )
+);
+
+// render app
+createRoot(document.getElementById('root')).render(
+  // wrapping app with provider
+  <Provider store={store}>
+    <React.StrictMode>
+      <AppProvider>
+        <RouterProvider router={router} />
+      </AppProvider>
+    </React.StrictMode>
+  </Provider>
+);
